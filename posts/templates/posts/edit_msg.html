@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>New Message</h1>
+
+{% if error %}
+<br/>
+{{error}}
+<br/>
+{% endif %}
+<br/>
+
+<form method="POST" action="{% url 'posts:edit_msg' %}">
+    {% csrf_token %}
+
+    Date<br/>
+    <input type="date" name="msg_date" /><br/>
+    Message<br/>
+    <input type="text" name="message" /><br/>
+    <br/>
+    <input type="submit" value="Post Message" />
+</form>
+{% endblock %}

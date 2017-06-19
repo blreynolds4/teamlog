@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+{% if info %}
+<br/>
+{{info}}
+<br/>
+{% endif %}
+<br/>
+<div class="row">
+    <button class="btn btn-primary" data-toggle="modal" data-target="#newRunForm">Post a Run</button>
+    <a class="btn btn-primary" href="{% url 'posts:edit_msg' %}">Post a Message</a>
+</div>
+<br/>
+{% for p in posts %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-1">
+                    {% if p.is_run %}
+                        <img src="{% static "images/003-runner.png" %}" alt="RUN" class="cc-icon-sm"></img>
+                    {% else %}
+                        <img src="{% static "images/002-chat.png" %}" alt="MESSAGE" class="cc-icon-sm"></img>
+                    {% endif %}
+                </div>
+                <div class="col-xs-2">
+                    {{p.post_date}}
+                </div>
+                {% if p.is_run %}
+                    <div class="col-xs-1">{{p.runpost.distance}} mi</div>
+                    <div class="col-xs-2">{{p.runpost.display_time}} ({{p.runpost.pace}} pace)</div>
+                {% endif %}
+            </div>
+            <div class="row">
+                <div class="col-xs-1"></div>
+                <div class="col-xs-2"><a href="#">@{{p.author.username}}</a></div>
+            </div>
+        </div>
+        <div class="panel-body">{{p.message}}</br>
+            <a href="#"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a> <a href="#"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span></a>
+        </div>
+    </div>
+{% endfor %}
+
+<!-- Modal -->
+    <div class="modal fade" id="newRunForm" tabindex="-1" role="dialog" role="dialog" aria-labelledby="postRunLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="postRunLabel">Post New Run</h4>
+          </div>
+          <div class="modal-body">
+            <form method="POST" action="{% url 'posts:edit_run' %}">
+                {% csrf_token %}
+                Date<br/>
+                <input type="date" name="run_date" /><br/>
+                Distance<br/>
+                <input type="number" name="run_distance" step=".01" /><br/>
+                Time<br/>
+                <input type="text" name="run_time" /><br/>
+                Route<br/>
+                <input type="text" name="run_route" /><br/>
+                Description<br/>
+                <input type="text" name="run_description" /><br/>
+                <br/>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <input type="submit" class="btn btn-default" value="Post Your Run" />
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+<!--
+            <div class="panel panel-default">
+                <div class="panel heading">
+                    <a href="#">@user</a> [date]
+                </div>
+                <div class="panel-body">
+                    I commented
+                </div>
+            </div>
+
+        <h4 class=list-group-item-heading>
+            <a href="#">@{{p.author.username}}</a> [{{p.run_date}}]:  {{p.distance}} mi  in {{p.display_time}} / {{p.pace}} pace
+        </h4>
+        <p class=list-group-item-text>{{p.description}}</br>
+            <a href="#">+1</a> <a href="#">Comment</a>
+        </p>
+
+
+-->

@@ -1,0 +1,19 @@
+body {
+  padding-top: 25px;
+}
+.starter-template {
+  padding: 20px 15px;
+}
+
+.cc-icon-sm {
+    max-width: 50%;
+    min-width: 24px;
+}
+.cc-icon-md {
+    max-width: 75%;
+    min-width: 24%;
+}
+.cc-icon-lg {
+    max-width: 100%;
+    min-width: 24%;
+}

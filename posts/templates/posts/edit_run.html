@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>New Run</h1>
+
+{% if error %}
+<br/>
+{{error}}
+<br/>
+{% endif %}
+<br/>
+
+<form method="POST" action="{% url 'posts:edit_run' %}">
+    {% csrf_token %}
+
+    Date<br/>
+    <input type="date" name="run_date" /><br/>
+    Distance<br/>
+    <input type="number" name="run_distance" step=".01" /><br/>
+    <br/>
+    Time<br/>
+    <input type="text" name="run_time" /><br/>
+    <br/>
+    Route<br/>
+    <input type="text" name="run_route" /><br/>
+    Description<br/>
+    <input type="text" name="run_description" /><br/>
+    <br/>
+    <input type="submit" value="Log Your Run" />
+</form>
+{% endblock %}
