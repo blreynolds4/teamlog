@@ -78,14 +78,34 @@ WSGI_APPLICATION = 'runchat.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
+db_conf = dict(engine=os.getenv('django.db.backends.postgresql_psycopg2'),
+               name=os.getenv('TL_DB_NAME'),
+               user=os.getenv('TL_DB_USER'),
+               password=os.getenv('TL_DB_PASSWORD'),
+               host=os.getenv('TL_DB_HOST'),
+               port=int(os.getenv('TL_DB_PORT', 0)))
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+# use sqllite when running locally
+if os.getenv('TL_DB_ENV', 'local') == 'local':
+    print("Using sqlite3...")
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
-
+else:
+    print("Using pg db...")
+    DATABASES = {
+        'default': {
+            'ENGINE': db_conf['engine'],
+            'NAME': db_conf['name'],
+            'USER': db_conf['user'],
+            'PASSWORD': db_conf['password'],
+            'HOST': db_conf['host'],
+            'PORT': db_conf['port'],
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
