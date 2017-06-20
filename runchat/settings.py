@@ -25,7 +25,7 @@ SECRET_KEY = 'mc26vzk$^1*v(yokgxz9sett8n4f6jf)&s9$52^g_1+73!f&g5'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["45.76.13.111", "prideruns.com", "aemsxcruns.com"]
 
 # tagging settings
 FORCE_LOWERCASE_TAGS = True
@@ -78,12 +78,14 @@ WSGI_APPLICATION = 'runchat.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-db_conf = dict(engine=os.getenv('django.db.backends.postgresql_psycopg2'),
+db_conf = dict(engine='django.db.backends.postgresql_psycopg2',
                name=os.getenv('TL_DB_NAME'),
                user=os.getenv('TL_DB_USER'),
                password=os.getenv('TL_DB_PASSWORD'),
                host=os.getenv('TL_DB_HOST'),
                port=int(os.getenv('TL_DB_PORT', 0)))
+
+print("DB Conf", db_conf)
 
 # use sqllite when running locally
 if os.getenv('TL_DB_ENV', 'local') == 'local':
@@ -144,6 +146,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
