@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Profile Settings</h2>
+
+<h3>Manage Teams</h3>
+    <ul class="list-group">
+        {% for owned_team in teams %}
+            <form method="POST" action="{% url 'accounts:profile' %}">
+                {% csrf_token %}
+                <input type="hidden" name="team" value="{{owned_team.team.name}}"/>
+                <li class="list-group-item">
+                    <div class="col-xs-2">
+                        <span class="badge">{{owned_team.team.name}}</span>
+                    </div>
+                    {% if owned_team.is_closed %}
+                        <input type="hidden" name="is_closed" value="0"/>
+                        <input class="btn btn-primary" type="submit" value="Open Team" />
+                    {% else %}
+                        <input type="hidden" name="is_closed" value="1"/>
+                        <input class="btn btn-primary" type="submit" value="Close Team" />
+                    {% endif %}
+                </li>
+            </form>
+        {% endfor %}
+    </ul>
+{% endblock %}

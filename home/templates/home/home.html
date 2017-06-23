@@ -8,6 +8,15 @@
 <br/>
 {% endif %}
 <br/>
+
+{% if share_url %}
+    <div class="alert alert-info" role="alert">
+    Thank you for signing up a new team!<br/>
+    Share this link with members to have them join:<br/>
+    {{ share_url }}
+    </div>
+{% endif %}
+
 <div class="row">
     <button class="btn btn-primary" data-toggle="modal" data-target="#newRunForm">Post a Run</button>
     <a class="btn btn-primary" href="{% url 'posts:edit_msg' %}">Post a Message</a>

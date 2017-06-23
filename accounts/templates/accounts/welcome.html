@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Welcome</h2>
+
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <h3 class="panel-title">Share this link with team members</h3>
+    </div>
+    <div class="panel-body">
+        {{ share_url }}
+    </div>
+</div>
+
+<p>
+    Share the above url with your team members and they will be able to sign up for the site as members of your team.
+</p>
+<p>
+    If you need to get the team url again or close the team to new members.  You can manage the team in your <a href="{% url 'accounts:profile' %}">profile settings</a>.
+</p>
+
+<a class="btn btn-primary center" href="{% url 'home' %}">Continue to Home page</a>
+{% endblock %}

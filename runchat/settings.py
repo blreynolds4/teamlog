@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
+LOCAL_DEV = ''
+ExecutionEnvironment = os.getenv("TL_ENV", LOCAL_DEV)
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -23,9 +26,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'mc26vzk$^1*v(yokgxz9sett8n4f6jf)&s9$52^g_1+73!f&g5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ["45.76.13.111", "prideruns.com", "aemsxcruns.com"]
+if ExecutionEnvironment == LOCAL_DEV:
+    DEBUG = True
+    ALLOWED_HOSTS = []
+else:
+    DEBUG = False
+    ALLOWED_HOSTS = ["45.76.13.111", "prideruns.com", "aemsxcruns.com"]
 
 # tagging settings
 FORCE_LOWERCASE_TAGS = True
@@ -88,7 +94,7 @@ db_conf = dict(engine='django.db.backends.postgresql_psycopg2',
 print("DB Conf", db_conf)
 
 # use sqllite when running locally
-if os.getenv('TL_DB_ENV', 'local') == 'local':
+if ExecutionEnvironment == LOCAL_DEV:
     print("Using sqlite3...")
     DATABASES = {
         'default': {

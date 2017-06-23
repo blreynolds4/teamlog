@@ -1,20 +1,20 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Team Signup</h2>
+<h2>Team Member Signup</h2>
 {% if error %}
-<br/>
-{{error}}
-<br/>
+<div class="alert alert-danger" role="alert">
+    {{error}}
+</div>
 {% endif %}
 <br/>
 <div class="alert alert-info" role="alert">
-    This page is to sign up a new team.<br/>
-    If you're trying to join an existing team, contact your coach for the url to join.
+    This page is to join an existing team.
 </div>
 
-<form method="POST" action="{% url 'accounts:signup' %}">
+<form method="POST" action="{% url 'accounts:join' %}">
     {% csrf_token %}
+    <input type="hidden" name="team" value="{{team}}" /><br/>
     Username<br/>
     <input type="text" name="username" /><br/>
     Password<br/>
@@ -22,9 +22,6 @@
     Confirm Password<br/>
     <input type="password" name="password2" /><br/>
     <br/>
-    Team to create<br/>
-    <input type="text" name="team" /><br/><br/>
-
     <input type="submit" class="btn btn-primary" value="Sign Up" />
 </form>
 {% endblock %}

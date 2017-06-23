@@ -3,10 +3,10 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from tagging.registry import register
+from tagging.models import Tag
 
-# Create your models here.
 
-
+# Models for users and relations to tags
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
@@ -20,6 +20,13 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.userprofile.save()
+
+
+class UserTeam(models.Model):
+    team = models.OneToOneField(Tag)
+    owner = models.OneToOneField(UserProfile)
+    is_closed = models.BooleanField(default=False)
+
 
 # register the class for tagging
 register(UserProfile)
