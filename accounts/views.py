@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import UserTeam
 from tagging.models import Tag
 from django.conf import settings
+from django.urls import reverse
 
 
 def queryable_tag(raw_name):
@@ -31,12 +32,11 @@ def clean_team_name(raw_name):
         return raw_name
 
 
-def join_url(team_name):
+def join_url(team_tag):
     '''
     Generate a url by name to the join page for this new team.
     '''
-    # TODO:  implement this for joining
-    return "<join url for {0}>".format(team_name)
+    return "{0}?team={1}".format(reverse('accounts:join'), team_tag.id)
 
 
 class SignupView(TemplateView):
@@ -66,7 +66,9 @@ class SignupView(TemplateView):
                         userteam.save()
 
                         login(request, user)
-                        return render(request, self.welcome_template, dict(share_url=join_url(team_tag.name)))
+                        return render(request,
+                                      self.welcome_template,
+                                      dict(share_url=request.build_absolute_uri(join_url(team_tag))))
                 else:
                     return render(request, self.template_name, dict(error="Sign up failed:  Team name is required."))
 
