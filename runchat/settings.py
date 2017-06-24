@@ -14,6 +14,7 @@ import os
 
 LOCAL_DEV = ''
 ExecutionEnvironment = os.getenv("TL_ENV", LOCAL_DEV)
+print("Exec Env is", ExecutionEnvironment)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
