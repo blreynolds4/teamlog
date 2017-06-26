@@ -12,12 +12,12 @@
 
 <form method="POST" action="{% url 'posts:edit_msg' %}">
     {% csrf_token %}
-
     Date<br/>
-    <input type="date" name="msg_date" /><br/>
+    <input class="form-control" type="text" name="msg_date" value="{{today}}" /><br/>
     Message<br/>
-    <input type="text" name="message" /><br/>
+    <input class="form-control" type="text" name="message" value="{{msg.message}}"/><br/>
     <br/>
-    <input type="submit" value="Post Message" />
+    <br/>
+    <input class="btn btn-primary" type="submit" value="Post Message"/>
 </form>
 {% endblock %}

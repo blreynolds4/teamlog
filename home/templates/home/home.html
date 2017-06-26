@@ -19,7 +19,7 @@
 
 <div class="row">
     <button class="btn btn-primary" data-toggle="modal" data-target="#newRunForm">Post a Run</button>
-    <a class="btn btn-primary" href="{% url 'posts:edit_msg' %}">Post a Message</a>
+    <button class="btn btn-primary" data-toggle="modal" data-target="#newMessageForm">Post a Message</button>
 </div>
 <br/>
 {% for p in posts %}
@@ -46,8 +46,11 @@
                 <div class="col-xs-2"><a href="#">@{{p.author.username}}</a></div>
             </div>
         </div>
+
         <div class="panel-body">{{p.message}}</br>
+            <!--
             <a href="#"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a> <a href="#"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span></a>
+            -->
         </div>
     </div>
 {% endfor %}
@@ -64,19 +67,44 @@
             <form method="POST" action="{% url 'posts:edit_run' %}">
                 {% csrf_token %}
                 Date<br/>
-                <input type="date" name="run_date" /><br/>
+                <input class="form-control" type="text" name="run_date" value="{{today}}"/><br/>
                 Distance<br/>
-                <input type="number" name="run_distance" step=".01" /><br/>
+                <input class="form-control" type="number" name="run_distance" value="{{distance}}" placeholder="0.0" step=".01" /><br/>
                 Time<br/>
-                <input type="text" name="run_time" /><br/>
+                <input class="form-control" type="text" name="run_time" value="{{duration}}" placeholder="hh:mm:ss" /><br/>
                 Route<br/>
-                <input type="text" name="run_route" /><br/>
+                <input class="form-control" type="text" name="run_route" value="{{route}}" placeholder="Route details"/><br/>
                 Description<br/>
-                <input type="text" name="run_description" /><br/>
+                <input class="form-control" type="text" name="run_description" value="{{description}}" placeholder="Describe the details of the run" /><br/>
                 <br/>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                  <input type="submit" class="btn btn-default" value="Post Your Run" />
+                  <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                  <input type="submit" class="btn btn-primary" value="Post Your Run" />
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="newMessageForm" tabindex="-1" role="dialog" role="dialog" aria-labelledby="postMessageLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="postMessageLabel">Post New Message</h4>
+          </div>
+          <div class="modal-body">
+            <form method="POST" action="{% url 'posts:edit_msg' %}">
+                {% csrf_token %}
+                Date<br/>
+                <input class="form-control" type="text" name="msg_date" value="{{today}}" /><br/>
+                Message<br/>
+                <input class="form-control" type="text" name="message" value="{{msg.message}}"/><br/>
+                <br/>
+                <br/>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                  <input class="btn btn-primary" type="submit" value="Post Message"/>
                 </div>
             </form>
           </div>

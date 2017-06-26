@@ -4,28 +4,27 @@
 <h1>New Run</h1>
 
 {% if error %}
-<br/>
-{{error}}
-<br/>
+<div class="alert alert-danger" role="alert">
+    {{error}}
+</div>
 {% endif %}
 <br/>
 
 <form method="POST" action="{% url 'posts:edit_run' %}">
     {% csrf_token %}
-
     Date<br/>
-    <input type="date" name="run_date" /><br/>
+    <input class="form-control" type="text" name="run_date" value="{{run.today}}"/><br/>
     Distance<br/>
-    <input type="number" name="run_distance" step=".01" /><br/>
-    <br/>
+    <input class="form-control" type="number" name="run_distance" value="{{run.distance}}" placeholder="0.0" step=".01" /><br/>
     Time<br/>
-    <input type="text" name="run_time" /><br/>
-    <br/>
+    <input class="form-control" type="text" name="run_time" value="{{run.duration}}" placeholder="hh:mm:ss" /><br/>
     Route<br/>
-    <input type="text" name="run_route" /><br/>
+    <input class="form-control" type="text" name="run_route" value="{{run.route}}" placeholder="Route details"/><br/>
     Description<br/>
-    <input type="text" name="run_description" /><br/>
+    <input class="form-control" type="text" name="run_description" value="{{run.description}}" placeholder="Describe the details of the run" /><br/>
     <br/>
-    <input type="submit" value="Log Your Run" />
+    <div class="modal-footer">
+      <input type="submit" class="btn btn-default" value="Post Your Run" />
+    </div>
 </form>
 {% endblock %}
