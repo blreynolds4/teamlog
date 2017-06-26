@@ -32,7 +32,7 @@ if ExecutionEnvironment == LOCAL_DEV:
     ALLOWED_HOSTS = []
 else:
     DEBUG = False
-    ALLOWED_HOSTS = ["45.76.13.111", "prideruns.com", "aemsxcruns.com"]
+    ALLOWED_HOSTS = ["45.76.13.111", "prideruns.com", "www.prideruns.com", "aemsxcruns.com", "www.aemsxcruns.com"]
 
 # tagging settings
 FORCE_LOWERCASE_TAGS = True
