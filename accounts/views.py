@@ -149,6 +149,9 @@ class ProfileView(LoginRequiredMixin, TemplateView):
 
     def get(self, request):
         owned_teams = UserTeam.objects.filter(owner=request.user.userprofile)
+        for ot in owned_teams:
+            ot.join_url = request.build_absolute_uri(join_url(ot.team))
+            print("JOIN URL", ot.join_url)
         return render(request, self.template_name, dict(teams=owned_teams))
 
     def post(self, request):
