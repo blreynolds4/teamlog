@@ -23,4 +23,5 @@ urlpatterns = [
     url(r'^accounts/', include('accounts.urls')),
     url(r'^posts/', include('posts.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'^version/', home.views.version_view, name='version')
 ]
