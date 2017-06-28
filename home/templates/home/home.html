@@ -44,6 +44,9 @@
             <div class="row">
                 <div class="col-xs-1"></div>
                 <div class="col-xs-2"><a href="#">@{{p.author.username}}</a></div>
+                {% if p.is_run %}
+                    <div class="col-xs-4">Route: {{p.runpost.route}}</div>
+                {% endif %}
             </div>
         </div>
 

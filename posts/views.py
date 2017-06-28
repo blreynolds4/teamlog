@@ -50,6 +50,7 @@ class RunView(LoginRequiredMixin, TemplateView):
                               duration=parse_duration(request.POST['run_time']),
                               distance=float(request.POST['run_distance']),
                               message=request.POST['run_description'],
+                              route=request.POST['run_route'],
                               post_date=post_date)
                 run.save()
                 print("User", request.user.username, "Tags", edit_string_for_tags(request.user.userprofile.tags))
