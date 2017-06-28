@@ -51,6 +51,9 @@
         </div>
 
         <div class="panel-body">{{p.message}}</br>
+            {% if p.is_run %}
+            {{p.runpost.details}}
+            {% endif %}
             <!--
             <a href="#"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a> <a href="#"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span></a>
             -->
@@ -78,7 +81,9 @@
                 Route<br/>
                 <input class="form-control" type="text" name="run_route" value="{{route}}" placeholder="Route details"/><br/>
                 Description<br/>
-                <input class="form-control" type="text" name="run_description" value="{{description}}" placeholder="Describe the details of the run" /><br/>
+                <input class="form-control" type="text" name="run_description" value="{{description}}" placeholder="Describe the workout" /><br/>
+                Details<br/>
+                <input class="form-control" type="text" name="run_details" value="{{run.details}}" placeholder="Describe how it went" /><br/>
                 <br/>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>

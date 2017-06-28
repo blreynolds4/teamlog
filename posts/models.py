@@ -25,6 +25,7 @@ class RunPost(TeamPost):
     distance = models.FloatField()
     duration = models.IntegerField()
     route = models.CharField(max_length=64)
+    details = models.TextField(default="")
 
     def display_time(self):
         td = timedelta(seconds=self.duration)

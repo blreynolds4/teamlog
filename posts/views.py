@@ -23,6 +23,7 @@ def save_submitted_run_data(values):
     result['duration'] = values.get('run_duration', '')
     result['route'] = values.get('run_route', '')
     result['description'] = values.get('run_description', '')
+    result['details'] = values.get('run_details', '')
 
     return result
 
@@ -51,6 +52,7 @@ class RunView(LoginRequiredMixin, TemplateView):
                               distance=float(request.POST['run_distance']),
                               message=request.POST['run_description'],
                               route=request.POST['run_route'],
+                              details=request.POST['run_details'],
                               post_date=post_date)
                 run.save()
                 print("User", request.user.username, "Tags", edit_string_for_tags(request.user.userprofile.tags))
