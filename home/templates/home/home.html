@@ -9,6 +9,32 @@
 {% endif %}
 <br/>
 
+<div class="row">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h4>
+                {{request.user.username}} training summary
+                {% for t in teams %}
+                    <span class="badge">{{t.name}}</span>
+                {% endfor %}
+            </h4>
+        </div>
+        <div class="panel-body">
+            {% if achievments %}
+                <div>
+                    Acheivements
+                        {% for a in achievements %}
+                            <span class="badge">a</span>
+                        {% endfor %}
+                </div>
+            {% endif %}
+            <div class="row"><div class="col-sm-2">Miles this week</div><div><span class="badge">{{run_stats.week}}</span></div></div>
+            <div class="row"><div class="col-sm-2">Season Mileage</div><div><span class="badge">{{run_stats.season}}</span></div></div>
+            <div class="row"><div class="col-sm-2">Total Mileage</div><div><span class="badge">{{run_stats.total}}</span></div></div>
+        </div>
+    </div>    
+</div>
+
 {% if share_url %}
     <div class="alert alert-info" role="alert">
     Thank you for signing up a new team!<br/>
@@ -42,11 +68,14 @@
                 {% endif %}
             </div>
             <div class="row">
-                <div class="col-xs-1"></div>
-                <div class="col-xs-2"><a href="#">@{{p.author.username}}</a></div>
+                <div class="col-xs-3"></div>
                 {% if p.is_run %}
                     <div class="col-xs-4">Route: {{p.runpost.route}}</div>
                 {% endif %}
+            </div>
+            <div class="row">
+                <div class="col-xs-1"></div>
+                <div class="col-xs-2"><a href="#">@{{p.author.user.username}}</a></div>
             </div>
         </div>
 

@@ -47,7 +47,7 @@ class RunView(LoginRequiredMixin, TemplateView):
             post_date = parse_date(request.POST['run_date'])
 
             if request.POST['run_distance'] and request.POST['run_time']:
-                run = RunPost(author=request.user,
+                run = RunPost(author=request.user.userprofile,
                               duration=parse_duration(request.POST['run_time']),
                               distance=float(request.POST['run_distance']),
                               message=request.POST['run_description'],
@@ -80,7 +80,7 @@ class MessageView(LoginRequiredMixin, TemplateView):
         try:
             post_date = parse_date(request.POST['msg_date'])
             if request.POST['message']:
-                msg = TeamPost(author=request.user,
+                msg = TeamPost(author=request.user.userprofile,
                                message=request.POST['message'],
                                post_date=post_date)
                 msg.save()

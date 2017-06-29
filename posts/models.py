@@ -1,11 +1,12 @@
 from django.db import models
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
+from accounts.models import UserProfile
 from tagging.registry import register
 from datetime import timedelta
 
 
 class TeamPost(models.Model):
-    author = models.ForeignKey(User)
+    author = models.ForeignKey(UserProfile)
     message = models.TextField()
     post_date = models.DateField()
     last_updated_at = models.DateTimeField(auto_now=True)
