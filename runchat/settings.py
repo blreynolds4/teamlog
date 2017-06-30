@@ -20,7 +20,7 @@ print("Exec Env is", ExecutionEnvironment)
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-APP_VERSION = "0.0.6"
+APP_VERSION = "0.0.7"
 
 DEFAULT_SEASON_START = date(2017, 6, 18)
 

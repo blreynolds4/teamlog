@@ -70,8 +70,65 @@ class HomeView(LoginRequiredMixin, TemplateView):
                       dict(user=request.user, posts=posts, today=today, teams=teams, run_stats=run_stats))
 
 
+def _get_first_sunday(start_date):
+    if start_date.weekday() == 6:
+        return start_date
+    else:
+        # figure out sunday and return that
+        delta = timedelta(days=(start_date.weekday()+1))
+        return start_date - delta
+
+
+def _update_run(calendar, run):
+    week = None
+    # get the right row in the calendar
+    for w in calendar:
+        if run.post_date >= w['week_of']:
+            week = w
+        else:
+            break
+
+    # update the run in it's week
+    for d in week['runs']:
+        if run.post_date == d['day']:
+            d['distance'] = run.runpost.distance
+
+
+def build_calendar(start_date, runs):
+    '''
+    Build a list of weeks with a list of workouts for each week
+    '''
+    calendar = []
+    if len(runs) > 0:
+        day_delta = timedelta(days=1)
+        week_delta = timedelta(days=7)
+        week_start = _get_first_sunday(start_date)
+        last_run = runs[-1].post_date
+        calendar = []
+        while last_run >= week_start:
+            week = dict(week_of=week_start, runs=[])
+            calendar.append(week)
+            day = week_start
+            week_start = week_start + week_delta
+
+            # fill in the days before next week
+            while day < week_start:
+                week['runs'].append(dict(day=day, distance=0, total=0))
+                day = day + day_delta
+
+        for r in runs:
+            _update_run(calendar, r)
+
+        for w in calendar:
+            dists = [r['distance'] for r in w['runs']]
+            w['total'] = sum(dists)
+
+    print("Calendar", calendar)
+    return calendar
+
+
 class UserHomeView(LoginRequiredMixin, TemplateView):
-    template_name = 'home/home.html'
+    template_name = 'home/userhome.html'
 
     def get(self, request, username):
         print("User View", username)
@@ -82,9 +139,12 @@ class UserHomeView(LoginRequiredMixin, TemplateView):
 
         tags = edit_string_for_tags(user.tags)
         # filter the posts to just this user
-        posts = TeamPost.tagged.with_any(tags).filter(author=user)
+        posts = TeamPost.tagged.with_any(tags).filter(author=user).order_by("post_date")
 
         run_stats = dict()
+
+        run_stats['calendar'] = build_calendar(user.season_start,
+                                               [r for r in posts if r.is_run()])
 
         # get the total miles
         temp = RunPost.objects.filter(author=user).aggregate(total=Sum('distance'))
@@ -108,7 +168,11 @@ class UserHomeView(LoginRequiredMixin, TemplateView):
         today = now.strftime(DATE_FORMAT)
         return render(request,
                       self.template_name,
-                      dict(user=auth_user, posts=posts, today=today, teams=teams, run_stats=run_stats))
+                      dict(user=auth_user,
+                           posts=posts,
+                           today=today,
+                           teams=teams,
+                           run_stats=run_stats))
 
 
 def version_view(request):
