@@ -7,6 +7,14 @@ from .models import UserTeam
 from tagging.models import Tag
 from django.conf import settings
 from django.urls import reverse
+from datetime import datetime
+
+DATE_FORMAT = "%m-%d-%Y"
+
+
+def parse_date(date_str):
+    dt = datetime.strptime(date_str, DATE_FORMAT)
+    return dt.date()
 
 
 def queryable_tag(raw_name):
@@ -152,17 +160,35 @@ class ProfileView(LoginRequiredMixin, TemplateView):
         for ot in owned_teams:
             ot.join_url = request.build_absolute_uri(join_url(ot.team))
             print("JOIN URL", ot.join_url)
-        return render(request, self.template_name, dict(teams=owned_teams))
+
+        season_date = request.user.userprofile.season_start.strftime(DATE_FORMAT)
+        return render(request, self.template_name, dict(teams=owned_teams,
+                                                        season_start=season_date))
 
     def post(self, request):
-        team = queryable_tag(request.POST['team'])
-        tag = Tag._default_manager.get(name=team)
-        user_team = UserTeam.objects.get(owner=request.user.userprofile, team=tag)
-        user_team.is_closed = request.POST['is_closed'] == '1'
-        user_team.save()
+        try:
+            print("POST DATA", request.POST)
+            team = queryable_tag(request.POST['team'])
+            tag = Tag._default_manager.get(name=team)
+            user_team = UserTeam.objects.get(owner=request.user.userprofile, team=tag)
+            user_team.is_closed = request.POST['is_closed'] == '1'
+            print("INPUT DATE", parse_date(request.POST.get('season_start', '')))
+            request.user.userprofile.season_start = parse_date(request.POST.get('season_start', ''))
+            request.user.userprofile.save()
+            user_team.save()
+            error = ""
+        except ValueError as e:
+            print("ValueError in Profile Post", e)
+            error = "Date must be provided in mm-dd-yyyy, 01-24-2017"
 
         owned_teams = UserTeam.objects.filter(owner=request.user.userprofile)
-        return render(request, self.template_name, dict(teams=owned_teams))
+        for ot in owned_teams:
+            ot.join_url = request.build_absolute_uri(join_url(ot.team))
+
+        season_date = request.user.userprofile.season_start.strftime(DATE_FORMAT)
+        return render(request, self.template_name, dict(error=error,
+                                                        teams=owned_teams,
+                                                        season_start=season_date))
 
 
 class LogoutView(TemplateView):
