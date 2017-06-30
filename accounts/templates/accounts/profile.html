@@ -11,28 +11,30 @@
 
 <form method="POST" action="{% url 'accounts:profile' %}">
     {% csrf_token %}
-    <h3>Manage Teams</h3>
-    <p>Copy and share the join url to add members to a team.  An open team allows new members to join.  A closed team prevents new members from joining.</p>
-    <ul class="list-group">
-        {% for owned_team in teams %}
-            <input type="hidden" name="team" value="{{owned_team.team.name}}"/>
-            <li class="list-group-item">
-                <div class="col-xs-2">
-                    <span class="badge">{{owned_team.team.name}}</span>
-                </div>
-                <div class="col-xs-6">
-                    {{owned_team.join_url}}
-                </div>
-                {% if owned_team.is_closed %}
-                    <input type="radio" name="is_closed" value="0" /> Open
-                    <input type="radio" name="is_closed" value="1" checked="checked" /> Closed
-                {% else %}
-                    <input type="radio" name="is_closed" value="0" checked="checked" /> Open
-                    <input type="radio" name="is_closed" value="1" /> Closed
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
+    {% if teams %}
+        <h3>Manage Teams</h3>
+        <p>Copy and share the join url to add members to a team.  An open team allows new members to join.  A closed team prevents new members from joining.</p>
+        <ul class="list-group">
+            {% for owned_team in teams %}
+                <input type="hidden" name="team" value="{{owned_team.team.name}}"/>
+                <li class="list-group-item">
+                    <div class="col-xs-2">
+                        <span class="badge">{{owned_team.team.name}}</span>
+                    </div>
+                    <div class="col-xs-6">
+                        {{owned_team.join_url}}
+                    </div>
+                    {% if owned_team.is_closed %}
+                        <input type="radio" name="is_closed" value="0" /> Open
+                        <input type="radio" name="is_closed" value="1" checked="checked" /> Closed
+                    {% else %}
+                        <input type="radio" name="is_closed" value="0" checked="checked" /> Open
+                        <input type="radio" name="is_closed" value="1" /> Closed
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
     <h3>Set Season Start</h3>
     <ul class="list-group">
         <li class="list-group-item">

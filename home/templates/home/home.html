@@ -13,7 +13,7 @@
     <div class="panel panel-primary">
         <div class="panel-heading">
             <h4>
-                {{request.user.username}} training summary
+                {{user.username}} training summary
                 {% for t in teams %}
                     <span class="badge">{{t.name}}</span>
                 {% endfor %}
@@ -75,7 +75,7 @@
             </div>
             <div class="row">
                 <div class="col-xs-1"></div>
-                <div class="col-xs-2"><a href="#">@{{p.author.user.username}}</a></div>
+                <div class="col-xs-2"><a href="{% url 'user' p.author.user.username %}">@{{p.author.user.username}}</a></div>
             </div>
         </div>
 

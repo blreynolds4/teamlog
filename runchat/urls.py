@@ -20,6 +20,7 @@ import home.views
 
 urlpatterns = [
     url(r'^$', home.views.HomeView.as_view(), name='home'),
+    url(r'^user/(?P<username>[\w_\.\-\+@ ]+)$', home.views.UserHomeView.as_view(), name='user'),
     url(r'^accounts/', include('accounts.urls')),
     url(r'^posts/', include('posts.urls')),
     url(r'^admin/', admin.site.urls),

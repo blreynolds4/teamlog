@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from tagging.utils import edit_string_for_tags
 from posts.models import TeamPost, RunPost
 from accounts.models import UserProfile
@@ -66,7 +67,48 @@ class HomeView(LoginRequiredMixin, TemplateView):
         today = now.strftime(DATE_FORMAT)
         return render(request,
                       self.template_name,
-                      dict(posts=posts, today=today, teams=teams, run_stats=run_stats))
+                      dict(user=request.user, posts=posts, today=today, teams=teams, run_stats=run_stats))
+
+
+class UserHomeView(LoginRequiredMixin, TemplateView):
+    template_name = 'home/home.html'
+
+    def get(self, request, username):
+        print("User View", username)
+        now = date.today()
+
+        auth_user = User.objects.get(username=username)
+        user = auth_user.userprofile
+
+        tags = edit_string_for_tags(user.tags)
+        # filter the posts to just this user
+        posts = TeamPost.tagged.with_any(tags).filter(author=user)
+
+        run_stats = dict()
+
+        # get the total miles
+        temp = RunPost.objects.filter(author=user).aggregate(total=Sum('distance'))
+        run_stats['total'] = total_or_zero(temp['total'])
+
+        # total for the season
+        season_start = user.season_start
+        temp = RunPost.objects.filter(author=user,
+                                      post_date__gte=season_start).aggregate(total=Sum('distance'))
+        run_stats['season'] = total_or_zero(temp['total'])
+
+        # total for the week
+        week_start = get_start_of_week(now)
+        temp = RunPost.objects.filter(author=user,
+                                      post_date__range=get_query_date_range(week_start, now)).aggregate(total=Sum('distance'))
+        run_stats['week'] = total_or_zero(temp['total'])
+
+        # get the teams so they can be shown
+        teams = user.tags
+
+        today = now.strftime(DATE_FORMAT)
+        return render(request,
+                      self.template_name,
+                      dict(user=auth_user, posts=posts, today=today, teams=teams, run_stats=run_stats))
 
 
 def version_view(request):
