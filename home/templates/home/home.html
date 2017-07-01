@@ -20,11 +20,11 @@
             </h4>
         </div>
         <div class="panel-body">
-            {% if achievments %}
+            {% if run_stats.achievements %}
                 <div>
-                    Acheivements
-                        {% for a in achievements %}
-                            <span class="badge">a</span>
+                    Mileage Achievements
+                        {% for a in run_stats.achievements %}
+                            <span class="badge achievement">{{a}}</span>
                         {% endfor %}
                 </div>
             {% endif %}
@@ -64,7 +64,7 @@
                 </div>
                 {% if p.is_run %}
                     <div class="col-xs-1">{{p.runpost.distance}} mi</div>
-                    <div class="col-xs-2">{{p.runpost.display_time}} ({{p.runpost.pace}} pace)</div>
+                    <div class="col-xs-4">{{p.runpost.display_time}} ({{p.runpost.pace}} pace)</div>
                 {% endif %}
             </div>
             <div class="row">
@@ -75,7 +75,7 @@
             </div>
             <div class="row">
                 <div class="col-xs-1"></div>
-                <div class="col-xs-2"><a href="{% url 'user' p.author.user.username %}">@{{p.author.user.username}}</a></div>
+                <div class="col-xs-3"><a href="{% url 'user' p.author.user.username %}">@{{p.author.user.username}}</a></div>    
             </div>
         </div>
 

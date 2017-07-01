@@ -24,6 +24,8 @@ APP_VERSION = "0.0.7"
 
 DEFAULT_SEASON_START = date(2017, 6, 18)
 
+ACHIEVEMENTS = [50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600]
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 

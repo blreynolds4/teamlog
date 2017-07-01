@@ -5,6 +5,11 @@ body {
   padding: 20px 15px;
 }
 
+.achievement {
+    background-color: #D4AF37;
+    font-size: 18px;
+}
+
 .cc-icon-sm {
     max-width: 50%;
     min-width: 24px;

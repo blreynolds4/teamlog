@@ -20,11 +20,11 @@
             </h4>
         </div>
         <div class="panel-body">
-            {% if achievments %}
+            {% if run_stats.achievements %}
                 <div>
-                    Acheivements
-                        {% for a in achievements %}
-                            <span class="badge">a</span>
+                    Mileage Achievements
+                        {% for a in run_stats.achievements %}
+                            <span class="badge achievement">{{a}}</span>
                         {% endfor %}
                 </div>
             {% endif %}

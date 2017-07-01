@@ -34,6 +34,14 @@ def total_or_zero(t):
     return t if t is not None else 0
 
 
+def _get_achievements(season_total):
+    '''
+    return a list of achievements for the user based
+    on their season total.
+    '''
+    return [a for a in settings.ACHIEVEMENTS if a <= season_total]
+
+
 class HomeView(LoginRequiredMixin, TemplateView):
     template_name = 'home/home.html'
 
@@ -55,6 +63,8 @@ class HomeView(LoginRequiredMixin, TemplateView):
                                       post_date__gte=season_start).aggregate(total=Sum('distance'))
         run_stats['season'] = total_or_zero(temp['total'])
 
+        run_stats['achievements'] = _get_achievements(run_stats['season'])
+
         # total for the week
         week_start = get_start_of_week(now)
         temp = RunPost.objects.filter(author=request.user.userprofile,
@@ -67,7 +77,11 @@ class HomeView(LoginRequiredMixin, TemplateView):
         today = now.strftime(DATE_FORMAT)
         return render(request,
                       self.template_name,
-                      dict(user=request.user, posts=posts, today=today, teams=teams, run_stats=run_stats))
+                      dict(user=request.user,
+                           posts=posts,
+                           today=today,
+                           teams=teams,
+                           run_stats=run_stats))
 
 
 def _get_first_sunday(start_date):
@@ -155,6 +169,8 @@ class UserHomeView(LoginRequiredMixin, TemplateView):
         temp = RunPost.objects.filter(author=user,
                                       post_date__gte=season_start).aggregate(total=Sum('distance'))
         run_stats['season'] = total_or_zero(temp['total'])
+
+        run_stats['achievements'] = _get_achievements(run_stats['season'])
 
         # total for the week
         week_start = get_start_of_week(now)
