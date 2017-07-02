@@ -105,7 +105,7 @@ def _update_run(calendar, run):
     # update the run in it's week
     for d in week['runs']:
         if run.post_date == d['day']:
-            d['distance'] = run.runpost.distance
+            d['distance'] = d['distance'] + run.runpost.distance
 
 
 def build_calendar(start_date, runs):
@@ -153,7 +153,7 @@ class UserHomeView(LoginRequiredMixin, TemplateView):
 
         tags = edit_string_for_tags(user.tags)
         # filter the posts to just this user
-        posts = TeamPost.tagged.with_any(tags).filter(author=user).order_by("post_date")
+        posts = TeamPost.tagged.with_any(tags).filter(author=user)
 
         run_stats = dict()
 
