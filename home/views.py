@@ -153,12 +153,16 @@ class UserHomeView(LoginRequiredMixin, TemplateView):
 
         tags = edit_string_for_tags(user.tags)
         # filter the posts to just this user
-        posts = TeamPost.tagged.with_any(tags).filter(author=user)
+        posts = TeamPost.tagged.with_any(tags).filter(author=user).order_by("post_date")
 
         run_stats = dict()
 
         run_stats['calendar'] = build_calendar(user.season_start,
                                                [r for r in posts if r.is_run()])
+
+        # now that calendar is build, re-sort the runs to most recent first
+        #posts = TeamPost.tagged.with_any(tags).filter(author=user)
+        posts = sorted(posts, key=lambda k: k.post_date, reverse=True)
 
         # get the total miles
         temp = RunPost.objects.filter(author=user).aggregate(total=Sum('distance'))
