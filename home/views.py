@@ -14,14 +14,6 @@ from django.conf import settings
 DATE_FORMAT = "%m-%d-%Y"
 
 
-def get_start_of_week(d):
-    '''
-    Get the first day of the week for the given date.
-    '''
-    delta = timedelta(days=(d.weekday()+1))
-    return d - delta
-
-
 def get_query_date_range(start, end):
     '''
     Get a date range for the query
@@ -66,7 +58,7 @@ class HomeView(LoginRequiredMixin, TemplateView):
         run_stats['achievements'] = _get_achievements(run_stats['season'])
 
         # total for the week
-        week_start = get_start_of_week(now)
+        week_start = _get_first_sunday(now)
         temp = RunPost.objects.filter(author=request.user.userprofile,
                                       post_date__range=get_query_date_range(week_start, now)).aggregate(total=Sum('distance'))
         run_stats['week'] = total_or_zero(temp['total'])
@@ -177,7 +169,8 @@ class UserHomeView(LoginRequiredMixin, TemplateView):
         run_stats['achievements'] = _get_achievements(run_stats['season'])
 
         # total for the week
-        week_start = get_start_of_week(now)
+        week_start = _get_first_sunday(now)
+        print("Start of week", week_start)
         temp = RunPost.objects.filter(author=user,
                                       post_date__range=get_query_date_range(week_start, now)).aggregate(total=Sum('distance'))
         run_stats['week'] = total_or_zero(temp['total'])
