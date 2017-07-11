@@ -5,6 +5,10 @@ body {
   padding: 20px 15px;
 }
 
+.controls {
+    padding-right: 2%;
+}
+
 .achievement {
     background-color: #D4AF37;
     font-size: 18px;

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>New Run</h1>
+<h3>Edit Run</h3>
 
 {% if error %}
 <div class="alert alert-danger" role="alert">
@@ -10,10 +10,14 @@
 {% endif %}
 <br/>
 
-<form method="POST" action="{% url 'posts:edit_run' %}">
+{% if run.id %}
+<form method="POST" action="{% url run.post_target run.id %}">
+{% else %}
+<form method="POST" action="{% url run.post_target %}">
+{% endif %}
     {% csrf_token %}
     Date<br/>
-    <input class="form-control" type="text" name="run_date" value="{{run.today}}"/><br/>
+    <input class="form-control" type="text" name="run_date" value="{{run.post_date}}"/><br/>
     Distance<br/>
     <input class="form-control" type="number" name="run_distance" value="{{run.distance}}" placeholder="0.0" step=".01" /><br/>
     Time<br/>
@@ -21,12 +25,12 @@
     Route<br/>
     <input class="form-control" type="text" name="run_route" value="{{run.route}}" placeholder="Route details"/><br/>
     Description<br/>
-    <input class="form-control" type="text" name="run_description" value="{{run.description}}" placeholder="Describe the workout" /><br/>
+    <input class="form-control" type="text" name="run_description" value="{{run.message}}" placeholder="Describe the workout" /><br/>
     Details<br/>
     <input class="form-control" type="text" name="run_details" value="{{run.details}}" placeholder="Describe how it went" /><br/>
     <br/>
     <div class="modal-footer">
-      <input type="submit" class="btn btn-default" value="Post Your Run" />
+      <input type="submit" class="btn btn-primary" value="Post Your Run" />
     </div>
 </form>
 {% endblock %}

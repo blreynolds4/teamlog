@@ -4,14 +4,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from tagging.utils import edit_string_for_tags
 from posts.models import TeamPost, RunPost
-from accounts.models import UserProfile
 from django.db.models import Sum
 from datetime import date, timedelta
 from django.http import HttpResponse
 from django.conf import settings
-
-
-DATE_FORMAT = "%m-%d-%Y"
 
 
 def get_query_date_range(start, end):
@@ -39,6 +35,7 @@ class HomeView(LoginRequiredMixin, TemplateView):
 
     def get(self, request):
         now = date.today()
+        print("RENDERING HOME for DATE", now)
 
         tags = edit_string_for_tags(request.user.userprofile.tags)
         posts = TeamPost.tagged.with_any(tags)
@@ -66,7 +63,7 @@ class HomeView(LoginRequiredMixin, TemplateView):
         # get the teams so they can be shown
         teams = request.user.userprofile.tags
 
-        today = now.strftime(DATE_FORMAT)
+        today = now.strftime(settings.DATE_FORMAT)
         return render(request,
                       self.template_name,
                       dict(user=request.user,
@@ -178,7 +175,7 @@ class UserHomeView(LoginRequiredMixin, TemplateView):
         # get the teams so they can be shown
         teams = user.tags
 
-        today = now.strftime(DATE_FORMAT)
+        today = now.strftime(settings.DATE_FORMAT)
         return render(request,
                       self.template_name,
                       dict(user=auth_user,

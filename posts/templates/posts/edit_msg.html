@@ -4,16 +4,19 @@
 <h1>New Message</h1>
 
 {% if error %}
-<br/>
-{{error}}
-<br/>
+<div class="alert alert-danger" role="alert">
+    {{error}}
+</div>
 {% endif %}
 <br/>
-
-<form method="POST" action="{% url 'posts:edit_msg' %}">
+{% if msg.id %}
+<form method="POST" action="{% url msg.post_target msg.id %}">
+{% else %}
+<form method="POST" action="{% url msg.post_target %}">
+{% endif %}
     {% csrf_token %}
     Date<br/>
-    <input class="form-control" type="text" name="msg_date" value="{{today}}" /><br/>
+    <input class="form-control" type="text" name="msg_date" value="{{msg.post_date}}" /><br/>
     Message<br/>
     <input class="form-control" type="text" name="message" value="{{msg.message}}"/><br/>
     <br/>

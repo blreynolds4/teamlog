@@ -77,45 +77,7 @@
 <br/>
 <h4>Post Details</h4>
 {% for p in posts %}
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <div class="row">
-                <div class="col-xs-1">
-                    {% if p.is_run %}
-                        <img src="{% static "images/003-runner.png" %}" alt="RUN" class="cc-icon-sm"></img>
-                    {% else %}
-                        <img src="{% static "images/002-chat.png" %}" alt="MESSAGE" class="cc-icon-sm"></img>
-                    {% endif %}
-                </div>
-                <div class="col-xs-2">
-                    {{p.post_date}}
-                </div>
-                {% if p.is_run %}
-                    <div class="col-xs-1">{{p.runpost.distance}} mi</div>
-                    <div class="col-xs-2">{{p.runpost.display_time}} ({{p.runpost.pace}} pace)</div>
-                {% endif %}
-            </div>
-            <div class="row">
-                <div class="col-xs-3"></div>
-                {% if p.is_run %}
-                    <div class="col-xs-4">Route: {{p.runpost.route}}</div>
-                {% endif %}
-            </div>
-            <div class="row">
-                <div class="col-xs-1"></div>
-                <div class="col-xs-2"><a href="{% url 'user' p.author.user.username %}">@{{p.author.user.username}}</a></div>
-            </div>
-        </div>
-
-        <div class="panel-body">{{p.message}}</br>
-            {% if p.is_run %}
-            {{p.runpost.details}}
-            {% endif %}
-            <!--
-            <a href="#"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a> <a href="#"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span></a>
-            -->
-        </div>
-    </div>
+    {% include "posts/post.html" %}
 {% endfor %}
 
 <!-- Modal -->
@@ -127,7 +89,7 @@
             <h4 class="modal-title" id="postRunLabel">Post New Run</h4>
           </div>
           <div class="modal-body">
-            <form method="POST" action="{% url 'posts:edit_run' %}">
+            <form method="POST" action="{% url 'posts:new_run' %}">
                 {% csrf_token %}
                 Date<br/>
                 <input class="form-control" type="text" name="run_date" value="{{today}}"/><br/>
@@ -159,7 +121,7 @@
             <h4 class="modal-title" id="postMessageLabel">Post New Message</h4>
           </div>
           <div class="modal-body">
-            <form method="POST" action="{% url 'posts:edit_msg' %}">
+            <form method="POST" action="{% url 'posts:new_msg' %}">
                 {% csrf_token %}
                 Date<br/>
                 <input class="form-control" type="text" name="msg_date" value="{{today}}" /><br/>

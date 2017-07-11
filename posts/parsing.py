@@ -18,20 +18,3 @@ def parse_duration(time_str):
         seconds = seconds + (MULTIPLIERS[i] * time_parts[i])
 
     return seconds
-
-
-def duration_to_string(seconds):
-    remaining = 0
-    hours, remaining = divmod(remaining, HOUR_SECONDS)
-    minutes, remaining = divmod(remaining, MINUTE_SECONDS)
-    seconds = remaining
-
-    # just show the minimun string, leave out zeros 00:00:00:01.1
-    # to return 1.1
-
-    result = ''
-    if minutes == 0:
-        result = "{minutes:0>2}:{seconds:0>2}"
-        result = result.format(minutes=minutes, seconds=seconds)
-
-    return result

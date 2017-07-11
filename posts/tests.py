@@ -16,9 +16,15 @@ class TimeParsingTest(TestCase):
         seconds = parse_duration("3:07:11")
         self.assertEqual(11231, seconds)
 
+    def test_parse_no_colon(self):
+        self.assertRaises(TypeError, parse_duration, "45")
+
+    def test_parse_colon_no_value(self):
+        seconds = parse_duration(":11")
+        self.assertEqual(11, seconds)
+
     def test_time_to_str(self):
         p = RunPost(duration=44.3)
-
         actual = p._remove_leading_zeros("44.3")
         self.assertEqual("44.3", actual)
 

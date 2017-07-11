@@ -1,0 +1,54 @@
+{% load static %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-xs-1">
+                {% if p.is_run %}
+                    <img src="{% static "images/003-runner.png" %}" alt="RUN" class="cc-icon-sm"></img>
+                {% else %}
+                    <img src="{% static "images/002-chat.png" %}" alt="MESSAGE" class="cc-icon-sm"></img>
+                {% endif %}
+            </div>
+            <div class="col-xs-2">
+                {{p.post_date}}
+            </div>
+            {% if p.is_run %}
+                <div class="col-xs-1">{{p.runpost.distance}} mi</div>
+                <div class="col-xs-4">{{p.runpost.display_time}} ({{p.runpost.pace}} pace)</div>
+            {% endif %}
+            {% if p.author.user.id == request.user.id %}
+                <div class="pull-right controls">
+                    {% if p.is_run %}
+                        <a href="{% url 'posts:edit_run' p.id %}"><span class="glyphicon glyphicon-pencil"></span></a>
+                    {% else %}
+                        <a href="{% url 'posts:edit_msg' p.id %}"><span class="glyphicon glyphicon-pencil"></span></a>
+                    {% endif %}
+                    <a href="#" onClick="document.getElementById('delete_post_{{p.id}}').submit()"><span class="glyphicon glyphicon-trash"></span></a>
+                    <form id="delete_post_{{p.id}}" method="POST" action="{% url 'posts:delete' p.id %}">
+                        {% csrf_token %}
+                        <input type="hidden">
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+        <div class="row">
+            <div class="col-xs-3"></div>
+            {% if p.is_run %}
+                <div class="col-xs-4">Route: {{p.runpost.route}}</div>
+            {% endif %}
+        </div>
+        <div class="row">
+            <div class="col-xs-1"></div>
+            <div class="col-xs-3"><a href="{% url 'user' p.author.user.username %}">@{{p.author.user.username}}</a></div>    
+        </div>
+    </div>
+
+    <div class="panel-body">{{p.message}}</br>
+        {% if p.is_run %}
+        {{p.runpost.details}}
+        {% endif %}
+        <!--
+        <a href="#"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a> <a href="#"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span></a>
+        -->
+    </div>
+</div>
