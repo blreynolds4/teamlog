@@ -22,6 +22,16 @@ class TeamPost(models.Model):
             return False
 
 
+class PostComment(models.Model):
+    author = models.ForeignKey(UserProfile)
+    original_post = models.ForeignKey(TeamPost, related_name='comments')
+    comment = models.TextField()
+    comment_timestamp = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['comment_timestamp']
+
+
 class RunPost(TeamPost):
     distance = models.FloatField()
     duration = models.IntegerField()

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Edit Comment</h1>
+
+{% if error %}
+<div class="alert alert-danger" role="alert">
+    {{error}}
+</div>
+{% endif %}
+<br/>
+<form method="POST" action="{% url comment.post_target comment.message_id %}">
+    {% csrf_token %}
+    <input type="hidden" name="message_id", value="{{comment.message_id}}"/>
+    Comment<br/>
+    <input class="form-control" type="text" name="comment" value="{{comment.comment}}"/><br/>
+    <br/>
+    <input class="btn btn-primary" type="submit" value="Comment"/>
+</form>
+{% endblock %}

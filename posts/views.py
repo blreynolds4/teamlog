@@ -8,7 +8,7 @@ from tagging.utils import edit_string_for_tags
 from datetime import datetime, date
 
 from .parsing import parse_duration
-from .models import TeamPost, RunPost
+from .models import TeamPost, RunPost, PostComment
 
 
 def parse_date(date_str):
@@ -22,7 +22,6 @@ def save_submitted_run_data(values, run_id):
     if run_id:
         result['id'] = run_id
     result['post_date'] = values.get('run_date', '')
-    print("result date", result['post_date'])
     result['distance'] = values.get('run_distance', '')
     result['duration'] = values.get('run_time', '')
     result['route'] = values.get('run_route', '')
@@ -164,3 +163,37 @@ class MessageView(LoginRequiredMixin, TemplateView):
                           self.template_name,
                           dict(error="Date format must be 01-01-2017 (leading zeroes required)",
                                msg=msg))
+
+
+class CommentView(LoginRequiredMixin, TemplateView):
+    template_name = "posts/comment.html"
+
+    def get(self, request, msg_id=None):
+        '''
+        This can be either a get to create a comment or a get
+        to edit a comment.
+        In the create case the msg id is set and comment is none.
+        In the edit case hopefully the msg can be none and the comment id can be set.
+        '''
+        comment = dict()
+        comment['post_target'] = 'posts:new_comment'
+        comment['message_id'] = msg_id
+        return render(request, self.template_name, dict(comment=comment))
+
+    def post(self, request, msg_id):
+        print("Creating new comment")
+        msg = TeamPost.objects.get(pk=msg_id)
+        comment = PostComment(author=request.user.userprofile,
+                              comment=request.POST['comment'],
+                              original_post=msg)
+        comment.save()
+        return redirect("home")
+
+
+class CommentDeleteView(LoginRequiredMixin, TemplateView):
+    template_name = "posts/comment.html"
+
+    def post(self, request, comment_id):
+        comment = PostComment.objects.get(pk=comment_id)
+        comment.delete()
+        return redirect("home")

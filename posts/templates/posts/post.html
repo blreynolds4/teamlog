@@ -1,3 +1,4 @@
+{% load tz %}
 {% load static %}
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -47,8 +48,33 @@
         {% if p.is_run %}
         {{p.runpost.details}}
         {% endif %}
-        <!--
-        <a href="#"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a> <a href="#"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span></a>
-        -->
+        <h5>
+            <a href="{% url 'posts:new_comment' p.id %}"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span></a>
+        </h5>
+        {% if p.comments.all %}
+            <h6>Comments</h6>
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="list-group">
+                        {% for c in p.comments.all %}
+                        <li class="list-group-item">
+                            {{c.comment_timestamp|localtime}}  
+                             <span class="comment">{{c.comment}}</span>
+                             <a href="{% url 'user' c.author.user.username %}">@{{c.author.user.username}}</a>
+                             {% if c.author.user.id == request.user.id %}
+                             <div class="pull-right controls">
+                                <a href="#" onClick="document.getElementById('delete_comment_{{c.id}}').submit()"><span class="glyphicon glyphicon-remove"></span></a>
+                                                    <form id="delete_comment_{{c.id}}" method="POST" action="{% url 'posts:delete_comment' c.id %}">
+                                                        {% csrf_token %}
+                                                        <input type="hidden">
+                                                    </form>                                
+                             </div>
+                             {% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% endif %}
     </div>
 </div>

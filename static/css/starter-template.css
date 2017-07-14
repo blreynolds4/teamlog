@@ -9,6 +9,12 @@ body {
     padding-right: 2%;
 }
 
+.comment {
+    font-weight: 500;
+    padding-left: 8px;
+    padding-right: 5px;
+}
+
 .achievement {
     background-color: #D4AF37;
     font-size: 18px;
