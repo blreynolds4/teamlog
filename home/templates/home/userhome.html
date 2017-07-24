@@ -28,9 +28,9 @@
                         {% endfor %}
                 </div>
             {% endif %}
-            <div class="row"><div class="col-sm-2">Miles this week</div><div><span class="badge">{{run_stats.week}}</span></div></div>
-            <div class="row"><div class="col-sm-2">Season Mileage</div><div><span class="badge">{{run_stats.season}}</span></div></div>
-            <div class="row"><div class="col-sm-2">Total Mileage</div><div><span class="badge">{{run_stats.total}}</span></div></div>
+            <div class="row"><div class="col-sm-2">Miles this week</div><div><span class="badge">{{run_stats.week|floatformat:2}}</span></div></div>
+            <div class="row"><div class="col-sm-2">Season Mileage</div><div><span class="badge">{{run_stats.season|floatformat:2}}</span></div></div>
+            <div class="row"><div class="col-sm-2">Total Mileage</div><div><span class="badge">{{run_stats.total|floatformat:2}}</span></div></div>
         </div>
     </div>    
 </div>
@@ -62,9 +62,9 @@
                         <tr>
                             <td>{{week.week_of}}</td>
                             {% for run in week.runs %}
-                                <td>{{run.distance}}</td>
+                                <td>{{run.distance|floatformat:2}}</td>
                             {% endfor %}
-                            <td>{{week.total}}</td>
+                            <td>{{week.total|floatformat:2}}</td>
                         </tr>
                     {% endfor %}
                     </tbody>

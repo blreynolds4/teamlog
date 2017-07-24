@@ -14,7 +14,7 @@
                 {{p.post_date}}
             </div>
             {% if p.is_run %}
-                <div class="col-xs-1">{{p.runpost.distance}} mi</div>
+                <div class="col-xs-1">{{p.runpost.distance|floatformat:2}} mi</div>
                 <div class="col-xs-4">{{p.runpost.display_time}} ({{p.runpost.pace}} pace)</div>
             {% endif %}
             {% if p.author.user.id == request.user.id %}
