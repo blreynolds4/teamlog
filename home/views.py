@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from tagging.utils import edit_string_for_tags
 from posts.models import TeamPost, RunPost
+from .models import Feedback
 from django.db.models import Sum
 from datetime import date, timedelta
 from django.http import HttpResponse
@@ -187,3 +188,22 @@ class UserHomeView(LoginRequiredMixin, TemplateView):
 
 def version_view(request):
     return HttpResponse(settings.APP_VERSION, content_type="plain/text")
+
+
+class FeedbackView(LoginRequiredMixin, TemplateView):
+    template_name = "home/feedback.html"
+
+    def post(self, request):
+        '''
+        Create a feedback record.
+        '''
+        if request.POST['feedback']:
+            m = Feedback(author=request.user.userprofile,
+                         message=request.POST['feedback'])
+            m.save()
+
+            return redirect("home")
+        else:
+            return render(request,
+                          self.template_name,
+                          dict(error="Please provide your feedback"))

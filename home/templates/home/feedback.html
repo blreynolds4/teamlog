@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Feedback</h1>
+<p>All feedback is greatly apprciated, anything helps.  Even if it's that you'd rather have the site as an app or that the colors are awful.  Please be as thourough and specific as you can in describing any new features so I can make them happen.</p>
+
+{% if error %}
+<div class="alert alert-danger" role="alert">
+    {{error}}
+</div>
+{% endif %}
+<br/>
+<form method="POST" action="{% url 'feedback' %}">
+    {% csrf_token %}
+    Feeback<br/>
+    <input class="form-control" type="text" name="feedback"/><br/>
+    <br/>
+    <br/>
+    <input class="btn btn-primary" type="submit" value="Give Feedback"/>
+</form>
+{% endblock %}
