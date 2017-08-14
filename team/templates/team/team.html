@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+{% if info %}
+<br/>
+{{info}}
+<br/>
+{% endif %}
+<br/>
+
+<div class="row">
+    <h2>Team Summary</h2>
+    <h3>Season Totals</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Athlete</th>
+                <th>Season Miles</th>
+                <th>Season Start</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for r in user_totals %}
+            <tr>
+                <td><a href="{% url 'user' r.user.user.username %}">@{{r.user.user.username}}</a></td>
+                <td>{{r.season_total}}</td>
+                <td>{{r.user.season_start}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+<br/>
+{% endblock %}

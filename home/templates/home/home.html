@@ -15,7 +15,7 @@
             <h4>
                 {{user.username}} training summary
                 {% for t in teams %}
-                    <span class="badge">{{t.name}}</span>
+                    <a href="{% url 'team:team_detail' t.name %}"><span class="badge">{{t.name}}</span></a>
                 {% endfor %}
             </h4>
         </div>

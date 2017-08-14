@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^user/(?P<username>[\w_\.\-\+@ ]+)$', home.views.UserHomeView.as_view(), name='user'),
     url(r'^accounts/', include('accounts.urls')),
     url(r'^posts/', include('posts.urls')),
+    url(r'^team/', include('team.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^version/', home.views.version_view, name='version'),
     url(r'^feedback/', home.views.FeedbackView.as_view(), name='feedback')
