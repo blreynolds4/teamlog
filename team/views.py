@@ -33,7 +33,7 @@ class TeamView(LoginRequiredMixin, TemplateView):
             print("Getting totals for", athlete.user.username)
             user_runs = RunPost.objects.filter(author=athlete, post_date__gte=athlete.season_start).aggregate(season_total=Sum('distance'))
             print("Totals", user_runs)
-            season_totals.append(dict(user=athlete, season_total=user_runs['season_total']))
+            season_totals.append(dict(user=athlete, season_total=user_runs['season_total'] if user_runs['season_total'] else 0))
 
         print("Sorting totals")
         sorted_totals = sorted(season_totals, key=lambda st: st['season_total'], reverse=True)
