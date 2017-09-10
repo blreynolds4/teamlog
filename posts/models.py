@@ -1,5 +1,6 @@
 from django.db import models
 #from django.contrib.auth.models import User
+from .parsing import remove_leading_zeros
 from accounts.models import UserProfile
 from tagging.registry import register
 from datetime import timedelta
@@ -47,20 +48,7 @@ class RunPost(TeamPost):
         pace = self.duration // self.distance
         td = timedelta(seconds=pace)
 
-        return self._remove_leading_zeros(str(td))
-
-    def _remove_leading_zeros(self, time_str):
-        parts = time_str.split(':')
-        skip = True
-        new_parts = []
-        for p in parts:
-            if skip and p in ['0', '00']:
-                pass
-            else:
-                skip = False
-                new_parts.append(p)
-
-        return ':'.join(new_parts)
+        return remove_leading_zeros(str(td))
 
 
 # register run posts so they can be tagged

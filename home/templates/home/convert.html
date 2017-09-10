@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Convert to 5k</h1>
+<p>Convert a time in a given distance to a 5k time.</p>
+
+{% if error %}
+<div class="alert alert-danger" role="alert">
+    {{error}}
+</div>
+{% endif %}
+<br/>
+<form method="POST" action="{% url 'convert' %}">
+    {% csrf_token %}
+    {% if conversion %}
+    <h3>Converted 5k time:  {{conversion}}</h3>
+    {% endif %}
+    <br/>
+    Distance<br/>
+    <input class="form-control" type="number" name="run_distance" placeholder="0.0" step=".001" /><br/>
+    Time<br/>
+    <input class="form-control" type="text" name="time"/><br/>
+    <br/>
+    <br/>
+    <input class="btn btn-primary" type="submit" value="Convert"/>
+</form>
+{% endblock %}

@@ -18,3 +18,17 @@ def parse_duration(time_str):
         seconds = seconds + (MULTIPLIERS[i] * time_parts[i])
 
     return seconds
+
+
+def remove_leading_zeros(time_str):
+    parts = time_str.split(':')
+    skip = True
+    new_parts = []
+    for p in parts:
+        if skip and p in ['0', '00']:
+            pass
+        else:
+            skip = False
+            new_parts.append(p)
+
+    return ':'.join(new_parts)

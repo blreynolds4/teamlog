@@ -4,11 +4,14 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from tagging.utils import edit_string_for_tags
 from posts.models import TeamPost, RunPost
+from posts.parsing import parse_duration, remove_leading_zeros
 from .models import Feedback
 from django.db.models import Sum
 from datetime import date, timedelta
 from django.http import HttpResponse
 from django.conf import settings
+
+from math import floor
 
 
 def get_query_date_range(start, end):
@@ -207,3 +210,28 @@ class FeedbackView(LoginRequiredMixin, TemplateView):
             return render(request,
                           self.template_name,
                           dict(error="Please provide your feedback"))
+
+
+class ConvertView(TemplateView):
+    template_name = 'home/convert.html'
+    FIVE_K_DISTANCE = 3.1
+
+    def post(self, request):
+        '''
+        do a conversion to 5k time.
+        '''
+        if request.POST['run_distance'] and request.POST['time']:
+
+            duration = parse_duration(request.POST['time'])
+            distance = float(request.POST['run_distance'])
+            print("Converting", duration, "for", distance)
+            five_k_time = timedelta(seconds=floor((duration / distance) * self.FIVE_K_DISTANCE))
+
+            print("5k Time", five_k_time)
+            return render(request,
+                          self.template_name,
+                          dict(conversion=remove_leading_zeros(str(five_k_time))))
+        else:
+            return render(request,
+                          self.template_name,
+                          dict(error="Please provide distance and time"))
